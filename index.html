@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Интерактивный калькулятор юнит-экономики, окупаемости и точки безубыточности для разных бизнес-моделей." />
+  <title>UnitLab — калькулятор экономики бизнеса</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="UnitLab — на главную">
+        <span class="brand-mark" aria-hidden="true">U</span>
+        <span>
+          <strong>UnitLab</strong>
+          <small>экономика бизнеса без таблиц</small>
+        </span>
+      </a>
+      <nav class="top-actions" aria-label="Действия">
+        <button class="button button-ghost" id="exportButton" type="button">Экспорт JSON</button>
+        <button class="button button-secondary" id="resetButton" type="button">Сбросить</button>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div>
+          <span class="eyebrow">Интерактивная модель</span>
+          <h1>Проверьте, зарабатывает ли бизнес <span>на одном клиенте</span></h1>
+          <p>
+            Выберите тип продукта, настройте воронку, LTV, расходы и оборудование.
+            UnitLab рассчитает CAC, LTV, окупаемость, точку безубыточности и объяснит результат простыми словами.
+          </p>
+        </div>
+        <aside class="hero-card" aria-label="Краткий принцип расчёта">
+          <span class="hero-card-icon" aria-hidden="true">↗</span>
+          <strong>Главный вопрос</strong>
+          <p>Сколько ценности остаётся после привлечения и обслуживания клиента?</p>
+          <div class="mini-equation">
+            <span>LTV</span><b>−</b><span>CAC</span><b>=</b><span>ценность</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" aria-labelledby="productTitle">
+        <div class="section-heading">
+          <div>
+            <span class="step">01</span>
+            <h2 id="productTitle">Выберите бизнес-модель</h2>
+          </div>
+          <p>Поля и стартовые значения адаптируются под выбранный продукт.</p>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      </section>
+
+      <section class="workspace">
+        <div class="controls-column">
+          <section class="panel" aria-labelledby="scenarioTitle">
+            <div class="panel-heading">
+              <div>
+                <span class="step">02</span>
+                <h2 id="scenarioTitle">Сценарий</h2>
+              </div>
+              <div class="segmented" id="scenarioButtons" role="group" aria-label="Сценарий расчёта">
+                <button type="button" data-scenario="conservative">Осторожный</button>
+                <button type="button" class="active" data-scenario="base">Базовый</button>
+                <button type="button" data-scenario="growth">Рост</button>
+              </div>
+            </div>
+            <div class="model-summary" id="modelSummary"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="funnelTitle">
+            <div class="panel-heading compact">
+              <div>
+                <span class="step">03</span>
+                <h2 id="funnelTitle">Привлечение и CAC</h2>
+              </div>
+              <span class="panel-badge" id="cacBadge">CAC</span>
+            </div>
+            <div class="slider-list" id="acquisitionInputs"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="ltvTitle">
+            <div class="panel-heading compact">
+              <div>
+                <span class="step">04</span>
+                <h2 id="ltvTitle">Ценность клиента и LTV</h2>
+              </div>
+              <span class="panel-badge" id="ltvBadge">LTV</span>
+            </div>
+            <div class="slider-list" id="ltvInputs"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="fixedTitle">
+            <div class="panel-heading compact">
+              <div>
+                <span class="step">05</span>
+                <h2 id="fixedTitle">Постоянные расходы</h2>
+              </div>
+              <span class="panel-badge" id="fixedBadge">в месяц</span>
+            </div>
+            <div class="slider-list" id="fixedInputs"></div>
+          </section>
+
+          <section class="panel" aria-labelledby="assetTitle">
+            <div class="panel-heading">
+              <div>
+                <span class="step">06</span>
+                <h2 id="assetTitle">Оборудование и активы</h2>
+              </div>
+              <p>Стартовые вложения и ежемесячная амортизация.</p>
+            </div>
+            <div class="asset-grid" id="assetGrid"></div>
+          </section>
+        </div>
+
+        <aside class="results-column" aria-label="Результаты расчёта">
+          <div class="sticky-results">
+            <section class="score-card" id="healthCard">
+              <div class="score-topline">
+                <span>Состояние модели</span>
+                <span class="status-pill" id="healthPill">—</span>
+              </div>
+              <div class="score-value" id="healthScore">0</div>
+              <div class="score-track" aria-hidden="true"><span id="healthTrack"></span></div>
+              <p id="healthText">Настройте параметры, чтобы получить диагноз.</p>
+            </section>
+
+            <section class="metrics-grid" id="metricsGrid"></section>
+
+            <section class="panel result-panel" aria-labelledby="cashflowTitle">
+              <div class="panel-heading compact">
+                <div>
+                  <span class="step">07</span>
+                  <h2 id="cashflowTitle">Экономика месяца</h2>
+                </div>
+              </div>
+              <div class="cashflow-chart" id="cashflowChart" aria-label="Структура месячной экономики"></div>
+              <div class="legend" id="cashflowLegend"></div>
+            </section>
+
+            <section class="panel result-panel" aria-labelledby="expenseTitle">
+              <div class="panel-heading compact">
+                <div>
+                  <span class="step">08</span>
+                  <h2 id="expenseTitle">Структура расходов</h2>
+                </div>
+              </div>
+              <div class="expense-visual">
+                <div class="donut" id="expenseDonut" role="img" aria-label="Диаграмма структуры расходов">
+                  <div><strong id="expenseTotal">0 ₽</strong><span>расходов</span></div>
+                </div>
+                <div class="expense-list" id="expenseList"></div>
+              </div>
+            </section>
+
+            <section class="panel diagnosis" aria-labelledby="diagnosisTitle">
+              <div class="panel-heading compact">
+                <div>
+                  <span class="step">09</span>
+                  <h2 id="diagnosisTitle">Что это означает</h2>
+                </div>
+              </div>
+              <div id="diagnosisList"></div>
+            </section>
+          </div>
+        </aside>
+      </section>
+
+      <section class="methodology">
+        <div>
+          <span class="eyebrow">Как считаем</span>
+          <h2>Формулы открыты — никакой магии</h2>
+        </div>
+        <div class="formula-grid">
+          <article><strong>CAC</strong><span>(маркетинг + продажи) / новые клиенты</span></article>
+          <article><strong>LTV</strong><span>месячная маржа клиента × срок жизни</span></article>
+          <article><strong>Payback</strong><span>CAC / месячная маржа клиента</span></article>
+          <article><strong>Break-even</strong><span>фиксированные расходы / маржа клиента</span></article>
+        </div>
+        <p class="disclaimer">
+          Модель является инструментом для предварительной оценки, а не бухгалтерским или инвестиционным заключением.
+          Реальный бизнес требует проверки налогов, сезонности, когорт, кассовых разрывов и фактических данных.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <span>UnitLab · учебный симулятор юнит-экономики</span>
+      <a href="https://github.com/jaydenwhitehereboyz/unit-economy" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
