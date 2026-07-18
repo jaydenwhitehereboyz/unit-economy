@@ -7,6 +7,7 @@
   <title>UnitLab — калькулятор экономики бизнеса</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="equipment.css" />
+  <link rel="stylesheet" href="analytics.css" />
 </head>
 <body>
   <div class="app-shell">
@@ -122,15 +123,7 @@
                 </div>
                 <div class="asset-search-wrap">
                   <span class="asset-search-icon" aria-hidden="true">⌕</span>
-                  <input
-                    class="asset-search-input"
-                    id="assetSearch"
-                    type="search"
-                    autocomplete="off"
-                    placeholder="Например: принтер, холодильник, монитор…"
-                    aria-label="Поиск оборудования"
-                    aria-controls="assetSuggestions"
-                  />
+                  <input class="asset-search-input" id="assetSearch" type="search" autocomplete="off" placeholder="Например: принтер, холодильник, монитор…" aria-label="Поиск оборудования" aria-controls="assetSuggestions" />
                   <span class="asset-search-shortcut" aria-hidden="true">Enter</span>
                 </div>
                 <div class="asset-suggestions" id="assetSuggestions" role="listbox" hidden></div>
@@ -139,41 +132,32 @@
 
               <form class="asset-configurator" id="assetAddForm" hidden>
                 <div class="asset-icon-preview" id="assetIconPreview" aria-hidden="true">🧰</div>
-                <div class="asset-field">
-                  <label for="assetNameInput">Название</label>
-                  <input id="assetNameInput" type="text" maxlength="80" required />
-                </div>
-                <div class="asset-field">
-                  <label for="assetCostInput">Цена, ₽</label>
-                  <input id="assetCostInput" type="number" min="1" step="100" inputmode="numeric" required />
-                </div>
-                <div class="asset-field">
-                  <label for="assetLifeInput">Амортизация, мес.</label>
-                  <input id="assetLifeInput" type="number" min="1" max="240" step="1" value="36" required />
-                </div>
-                <div class="asset-field">
-                  <label for="assetQtyInput">Количество</label>
-                  <input id="assetQtyInput" type="number" min="1" max="100" step="1" value="1" required />
-                </div>
-                <div class="asset-form-actions">
-                  <button class="asset-add-button" type="submit">Добавить</button>
-                  <button class="asset-cancel-button" id="cancelAssetButton" type="button">Отмена</button>
-                </div>
+                <div class="asset-field"><label for="assetNameInput">Название</label><input id="assetNameInput" type="text" maxlength="80" required /></div>
+                <div class="asset-field"><label for="assetCostInput">Цена, ₽</label><input id="assetCostInput" type="number" min="1" step="100" inputmode="numeric" required /></div>
+                <div class="asset-field"><label for="assetLifeInput">Амортизация, мес.</label><input id="assetLifeInput" type="number" min="1" max="240" step="1" value="36" required /></div>
+                <div class="asset-field"><label for="assetQtyInput">Количество</label><input id="assetQtyInput" type="number" min="1" max="100" step="1" value="1" required /></div>
+                <div class="asset-form-actions"><button class="asset-add-button" type="submit">Добавить</button><button class="asset-cancel-button" id="cancelAssetButton" type="button">Отмена</button></div>
               </form>
             </div>
 
             <div class="asset-grid custom-asset-grid" id="customAssetGrid" aria-live="polite"></div>
             <div class="asset-grid" id="assetGrid"></div>
           </section>
+
+          <section class="panel" aria-labelledby="retentionControlsTitle">
+            <div class="panel-heading compact">
+              <div><span class="step">07</span><h2 id="retentionControlsTitle">Retention-модель</h2></div>
+              <span class="panel-badge">когорта</span>
+            </div>
+            <p class="retention-intro">Настройте форму спада: резкий первый месяц, дальнейшее снижение и долгосрочное плато устойчивых пользователей.</p>
+            <div class="analytics-controls" id="retentionControls"></div>
+          </section>
         </div>
 
         <aside class="results-column" aria-label="Результаты расчёта">
           <div class="sticky-results">
             <section class="score-card" id="healthCard">
-              <div class="score-topline">
-                <span>Состояние модели</span>
-                <span class="status-pill" id="healthPill">—</span>
-              </div>
+              <div class="score-topline"><span>Состояние модели</span><span class="status-pill" id="healthPill">—</span></div>
               <div class="score-value" id="healthScore">0</div>
               <div class="score-track" aria-hidden="true"><span id="healthTrack"></span></div>
               <p id="healthText">Настройте параметры, чтобы получить диагноз.</p>
@@ -182,38 +166,45 @@
             <section class="metrics-grid" id="metricsGrid"></section>
 
             <section class="panel result-panel" aria-labelledby="cashflowTitle">
-              <div class="panel-heading compact">
-                <div>
-                  <span class="step">07</span>
-                  <h2 id="cashflowTitle">Экономика месяца</h2>
-                </div>
-              </div>
+              <div class="panel-heading compact"><div><span class="step">08</span><h2 id="cashflowTitle">Экономика месяца</h2></div></div>
               <div class="cashflow-chart" id="cashflowChart" aria-label="Структура месячной экономики"></div>
               <div class="legend" id="cashflowLegend"></div>
             </section>
 
             <section class="panel result-panel" aria-labelledby="expenseTitle">
-              <div class="panel-heading compact">
-                <div>
-                  <span class="step">08</span>
-                  <h2 id="expenseTitle">Структура расходов</h2>
-                </div>
-              </div>
+              <div class="panel-heading compact"><div><span class="step">09</span><h2 id="expenseTitle">Структура расходов</h2></div></div>
               <div class="expense-visual">
-                <div class="donut" id="expenseDonut" role="img" aria-label="Диаграмма структуры расходов">
-                  <div><strong id="expenseTotal">0 ₽</strong><span>расходов</span></div>
-                </div>
+                <div class="donut" id="expenseDonut" role="img" aria-label="Диаграмма структуры расходов"><div><strong id="expenseTotal">0 ₽</strong><span>расходов</span></div></div>
                 <div class="expense-list" id="expenseList"></div>
               </div>
             </section>
 
-            <section class="panel diagnosis" aria-labelledby="diagnosisTitle">
-              <div class="panel-heading compact">
-                <div>
-                  <span class="step">09</span>
-                  <h2 id="diagnosisTitle">Что это означает</h2>
-                </div>
+            <section class="panel result-panel chart-panel" aria-labelledby="retentionChartTitle">
+              <div class="panel-heading compact"><div><span class="step">10</span><h2 id="retentionChartTitle">Retention-кривая</h2></div><span class="panel-badge">спад → плато</span></div>
+              <p class="chart-caption">Доля исходной когорты, остающаяся активной с течением времени.</p>
+              <div class="chart-surface" id="retentionChart"></div>
+              <div id="retentionSummary"></div>
+            </section>
+
+            <section class="panel result-panel chart-panel" aria-labelledby="paybackChartTitle">
+              <div class="panel-heading compact"><div><span class="step">11</span><h2 id="paybackChartTitle">Окупаемость клиента</h2></div><span class="panel-badge">CAC payback</span></div>
+              <p class="chart-caption">Красная полоса — стоимость привлечения. Синяя кривая — накопленная маржа клиента.</p>
+              <div class="chart-surface" id="paybackChart"></div>
+              <div id="paybackSummary"></div>
+            </section>
+
+            <section class="panel result-panel" aria-labelledby="npsTitle">
+              <div class="panel-heading compact"><div><span class="step">12</span><h2 id="npsTitle">Net Promoter Score</h2></div><span class="panel-badge">NPS</span></div>
+              <div class="nps-explainer">
+                <div class="nps-question"><strong>Главный вопрос NPS</strong>Насколько вероятно, что вы порекомендуете продукт другу или коллеге по шкале от 0 до 10?</div>
+                <div><div class="nps-scale" id="npsScale" aria-label="Шкала NPS от 0 до 10"></div><div class="nps-category-labels"><span>0–6 · критики</span><span>7–8 · нейтральные</span><span>9–10 · промоутеры</span></div></div>
               </div>
+              <div class="nps-inputs" id="npsInputs"></div>
+              <div class="nps-result" id="npsResult"></div>
+            </section>
+
+            <section class="panel diagnosis" aria-labelledby="diagnosisTitle">
+              <div class="panel-heading compact"><div><span class="step">13</span><h2 id="diagnosisTitle">Что это означает</h2></div></div>
               <div id="diagnosisList"></div>
             </section>
           </div>
@@ -221,31 +212,25 @@
       </section>
 
       <section class="methodology">
-        <div>
-          <span class="eyebrow">Как считаем</span>
-          <h2>Формулы открыты — никакой магии</h2>
-        </div>
+        <div><span class="eyebrow">Как считаем</span><h2>Формулы открыты — никакой магии</h2></div>
         <div class="formula-grid">
           <article><strong>CAC</strong><span>(маркетинг + продажи) / новые клиенты</span></article>
           <article><strong>LTV</strong><span>месячная маржа клиента × срок жизни</span></article>
           <article><strong>Payback</strong><span>CAC / месячная маржа клиента</span></article>
           <article><strong>Break-even</strong><span>фиксированные расходы / маржа клиента</span></article>
+          <article><strong>Retention</strong><span>доля исходной когорты, остающаяся активной в каждый период</span></article>
+          <article><strong>NPS</strong><span>% промоутеров − % критиков</span></article>
         </div>
-        <p class="disclaimer">
-          Модель является инструментом для предварительной оценки, а не бухгалтерским или инвестиционным заключением.
-          Реальный бизнес требует проверки налогов, сезонности, когорт, кассовых разрывов и фактических данных.
-        </p>
+        <p class="disclaimer">Модель является инструментом для предварительной оценки, а не бухгалтерским или инвестиционным заключением. Реальный бизнес требует проверки налогов, сезонности, когорт, кассовых разрывов и фактических данных.</p>
       </section>
     </main>
 
-    <footer>
-      <span>UnitLab · учебный симулятор юнит-экономики</span>
-      <a href="https://github.com/jaydenwhitehereboyz/unit-economy" target="_blank" rel="noreferrer">GitHub ↗</a>
-    </footer>
+    <footer><span>UnitLab · учебный симулятор юнит-экономики</span><a href="https://github.com/jaydenwhitehereboyz/unit-economy" target="_blank" rel="noreferrer">GitHub ↗</a></footer>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
   <script src="equipment.js"></script>
+  <script src="analytics.js"></script>
 </body>
 </html>
