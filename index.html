@@ -6,6 +6,7 @@
   <meta name="description" content="Интерактивный калькулятор юнит-экономики, окупаемости и точки безубыточности для разных бизнес-моделей." />
   <title>UnitLab — калькулятор экономики бизнеса</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="equipment.css" />
 </head>
 <body>
   <div class="app-shell">
@@ -112,6 +113,56 @@
               </div>
               <p>Стартовые вложения и ежемесячная амортизация.</p>
             </div>
+
+            <div class="asset-builder">
+              <div class="asset-search-area">
+                <div class="asset-search-label">
+                  <strong>Добавить своё оборудование</strong>
+                  <span>Поиск по локальному каталогу</span>
+                </div>
+                <div class="asset-search-wrap">
+                  <span class="asset-search-icon" aria-hidden="true">⌕</span>
+                  <input
+                    class="asset-search-input"
+                    id="assetSearch"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="Например: принтер, холодильник, монитор…"
+                    aria-label="Поиск оборудования"
+                    aria-controls="assetSuggestions"
+                  />
+                  <span class="asset-search-shortcut" aria-hidden="true">Enter</span>
+                </div>
+                <div class="asset-suggestions" id="assetSuggestions" role="listbox" hidden></div>
+                <p class="asset-search-note">Выберите вариант из каталога или добавьте любое собственное название. Цена и срок амортизации редактируются перед добавлением.</p>
+              </div>
+
+              <form class="asset-configurator" id="assetAddForm" hidden>
+                <div class="asset-icon-preview" id="assetIconPreview" aria-hidden="true">🧰</div>
+                <div class="asset-field">
+                  <label for="assetNameInput">Название</label>
+                  <input id="assetNameInput" type="text" maxlength="80" required />
+                </div>
+                <div class="asset-field">
+                  <label for="assetCostInput">Цена, ₽</label>
+                  <input id="assetCostInput" type="number" min="1" step="100" inputmode="numeric" required />
+                </div>
+                <div class="asset-field">
+                  <label for="assetLifeInput">Амортизация, мес.</label>
+                  <input id="assetLifeInput" type="number" min="1" max="240" step="1" value="36" required />
+                </div>
+                <div class="asset-field">
+                  <label for="assetQtyInput">Количество</label>
+                  <input id="assetQtyInput" type="number" min="1" max="100" step="1" value="1" required />
+                </div>
+                <div class="asset-form-actions">
+                  <button class="asset-add-button" type="submit">Добавить</button>
+                  <button class="asset-cancel-button" id="cancelAssetButton" type="button">Отмена</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="asset-grid custom-asset-grid" id="customAssetGrid" aria-live="polite"></div>
             <div class="asset-grid" id="assetGrid"></div>
           </section>
         </div>
@@ -195,5 +246,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
+  <script src="equipment.js"></script>
 </body>
 </html>
