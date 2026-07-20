@@ -58,11 +58,4 @@
   const observer = new MutationObserver(() => window.requestAnimationFrame(fillAdvice));
   observer.observe(document.documentElement, { childList: true, subtree: true });
   fillAdvice();
-
-  if (!document.querySelector('script[data-unitlab-dashboard]')) {
-    const dashboardScript = document.createElement('script');
-    dashboardScript.src = 'dashboard-mode.js?v=1';
-    dashboardScript.dataset.unitlabDashboard = 'true';
-    document.body.appendChild(dashboardScript);
-  }
 })();
