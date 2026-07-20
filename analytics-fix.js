@@ -64,9 +64,6 @@ renderPaybackChart = function renderPaybackChartFixed() {
     : 36;
   const values = searchValues.slice(0, horizon + 1);
 
-  // Фокусируем вертикальную шкалу на стоимости привлечения.
-  // Так изменение CAC и маржи действительно меняет геометрию графика,
-  // а линия не превращается каждый раз в одинаковую диагональ.
   const scaleTop = c.cac > 0
     ? Math.max(c.cac * 3, 1)
     : Math.max(c.monthlyContributionPerCustomer * 6, 1);
@@ -151,7 +148,6 @@ function fixSyncRetention(target) {
   scheduleAnalyticsFixRender();
 }
 
-// Делегирование не зависит от того, перерисовались ли сами поля.
 document.addEventListener('input', event => {
   const target = event.target;
   if (!(target instanceof HTMLInputElement)) return;
@@ -197,7 +193,6 @@ document.addEventListener('submit', event => {
   if (event.target.matches('#assetAddForm')) window.setTimeout(scheduleAnalyticsFixRender, 0);
 });
 
-// Любое обновление карточек метрик гарантированно перерисовывает графики.
 const analyticsFixMetricsGrid = el('metricsGrid');
 if (analyticsFixMetricsGrid) {
   const analyticsFixObserver = new MutationObserver(scheduleAnalyticsFixRender);
@@ -209,3 +204,13 @@ if (analyticsFixMetricsGrid) {
 }
 
 scheduleAnalyticsFixRender();
+
+function loadUnitLabWizard() {
+  if (document.querySelector('script[data-unitlab-wizard]')) return;
+  const script = document.createElement('script');
+  script.src = 'wizard.js?v=1';
+  script.dataset.unitlabWizard = 'true';
+  document.body.appendChild(script);
+}
+
+loadUnitLabWizard();
